@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Socket",
+        "repositoryURL": "https://github.com/IBM-Swift/BlueSocket.git",
+        "state": {
+          "branch": null,
+          "revision": "c9894fd117457f1d006575fbfb2fdfd6f79eac03",
+          "version": "1.0.200"
+        }
+      },
+      {
+        "package": "SSLService",
+        "repositoryURL": "https://github.com/IBM-Swift/BlueSSLService",
+        "state": {
+          "branch": null,
+          "revision": "ae5889d2a8b068d2d3ab91ec73aa8f557c03cd8a",
+          "version": "1.0.200"
+        }
+      },
+      {
+        "package": "PostgresClientKit",
+        "repositoryURL": "https://github.com/codewinsdotcom/PostgresClientKit",
+        "state": {
+          "branch": "master",
+          "revision": "4e4f567f434ba253d6f4e0fb98b25e53d151b872",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
