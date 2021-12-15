@@ -10,17 +10,33 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
-            Text("Tap on button!")
-                .padding()
             Button {
-                SqlRequest.requestTest()
+                Imitation.update(databaseNumber: 1)
             } label: {
-                Label("Request", systemImage: "server.rack")
+                Label("Update", systemImage: "arrow.clockwise")
             }
+            .padding(.top)
+            
+            Button {
+                Imitation.insert(databaseNumber: 1)
+            } label: {
+                Label("Insert", systemImage: "text.insert")
+            }
+            
+            Button {
+                Imitation.delete(databaseNumber: 1)
+            } label: {
+                Label("Delete", systemImage: "trash.fill")
+            }
+            .padding(.bottom)
         }
         .padding()
+        .onAppear() {
+            SqlRequest.createSequence()
+        }
     }
 }
+
     
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

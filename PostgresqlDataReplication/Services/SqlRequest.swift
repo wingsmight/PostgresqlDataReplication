@@ -10,16 +10,25 @@ import PostgresClientKit
 
 
 class SqlRequest {
-    static func requestTest() {
-        do {
-            var configuration = PostgresClientKit.ConnectionConfiguration()
-            configuration.host = "fpm2.ami.nstu.ru"
-            configuration.database = "students"
-            configuration.user = "pmi-b8502"
-            configuration.ssl = false
-            configuration.credential = .cleartextPassword(password: "32Schero")
+    private static var _configuraion: PostgresClientKit.ConnectionConfiguration? = nil
+    
+    
+    public static func createSequence() {
+        let connection = try! PostgresClientKit.Connection(configuration: SqlRequest.configuration)
+        defer { connection.close() }
 
-            let connection = try PostgresClientKit.Connection(configuration: configuration)
+        let text = "CREATE SEQUENCE device_count START 12"
+        let statement = try! connection.prepareStatement(text: text)
+        defer { statement.close() }
+        do {
+            try statement.execute()
+        } catch {
+            print("createSequence() error: \(error).")
+        }
+    }
+    public static func requestTest() {
+        do {
+            let connection = try PostgresClientKit.Connection(configuration: SqlRequest.configuration)
             defer { connection.close() }
 
             let text = "SELECT * FROM pmib8502.s WHERE town = $1;"
@@ -44,5 +53,20 @@ class SqlRequest {
         } catch {
             print(error)
         }
+    }
+    
+    
+    public static var configuration: ConnectionConfiguration! {
+        if _configuraion == nil {
+            var newConfiguration = PostgresClientKit.ConnectionConfiguration()
+            newConfiguration.host = "fpm2.ami.nstu.ru"
+            newConfiguration.database = "students"
+            newConfiguration.user = "pmi-b8502"
+            newConfiguration.ssl = false
+            newConfiguration.credential = .cleartextPassword(password: "32Schero")
+            
+            _configuraion = newConfiguration
+        }
+        return _configuraion
     }
 }
