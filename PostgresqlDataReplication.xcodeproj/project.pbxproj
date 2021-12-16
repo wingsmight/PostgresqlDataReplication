@@ -16,6 +16,9 @@
 		CE5363AE276A74EA00C52286 /* Replicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5363AD276A74EA00C52286 /* Replicator.swift */; };
 		CE5363B0276A752800C52286 /* Imitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5363AF276A752800C52286 /* Imitation.swift */; };
 		CE6CD637276AB2A500A2E536 /* TableChangeLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6CD636276AB2A500A2E536 /* TableChangeLog.swift */; };
+		CE6CD63A276B4F5B00A2E536 /* DateExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6CD639276B4F5B00A2E536 /* DateExt.swift */; };
+		CE6CD63D276B604900A2E536 /* DeviceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6CD63C276B604900A2E536 /* DeviceRow.swift */; };
+		CE6CD63F276B645100A2E536 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6CD63E276B645100A2E536 /* Database.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +32,9 @@
 		CE5363AD276A74EA00C52286 /* Replicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Replicator.swift; sourceTree = "<group>"; };
 		CE5363AF276A752800C52286 /* Imitation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imitation.swift; sourceTree = "<group>"; };
 		CE6CD636276AB2A500A2E536 /* TableChangeLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableChangeLog.swift; sourceTree = "<group>"; };
+		CE6CD639276B4F5B00A2E536 /* DateExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExt.swift; sourceTree = "<group>"; };
+		CE6CD63C276B604900A2E536 /* DeviceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceRow.swift; sourceTree = "<group>"; };
+		CE6CD63E276B645100A2E536 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +68,8 @@
 		CE536397276A59BB00C52286 /* PostgresqlDataReplication */ = {
 			isa = PBXGroup;
 			children = (
+				CE6CD63B276B603A00A2E536 /* Data */,
+				CE6CD638276B4F4500A2E536 /* Extensions */,
 				CE5363A7276A5A1200C52286 /* Services */,
 				CE536398276A59BB00C52286 /* PostgresqlDataReplicationApp.swift */,
 				CE53639A276A59BB00C52286 /* ContentView.swift */,
@@ -87,8 +95,25 @@
 				CE5363AD276A74EA00C52286 /* Replicator.swift */,
 				CE5363AF276A752800C52286 /* Imitation.swift */,
 				CE6CD636276AB2A500A2E536 /* TableChangeLog.swift */,
+				CE6CD63E276B645100A2E536 /* Database.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		CE6CD638276B4F4500A2E536 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CE6CD639276B4F5B00A2E536 /* DateExt.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		CE6CD63B276B603A00A2E536 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				CE6CD63C276B604900A2E536 /* DeviceRow.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -169,8 +194,11 @@
 			files = (
 				CE5363AE276A74EA00C52286 /* Replicator.swift in Sources */,
 				CE5363B0276A752800C52286 /* Imitation.swift in Sources */,
+				CE6CD63D276B604900A2E536 /* DeviceRow.swift in Sources */,
+				CE6CD63A276B4F5B00A2E536 /* DateExt.swift in Sources */,
 				CE6CD637276AB2A500A2E536 /* TableChangeLog.swift in Sources */,
 				CE53639B276A59BB00C52286 /* ContentView.swift in Sources */,
+				CE6CD63F276B645100A2E536 /* Database.swift in Sources */,
 				CE5363A9276A5A2200C52286 /* SqlRequest.swift in Sources */,
 				CE536399276A59BB00C52286 /* PostgresqlDataReplicationApp.swift in Sources */,
 			);

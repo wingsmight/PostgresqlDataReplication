@@ -25,7 +25,7 @@ struct ContentView: View {
             .padding(.top)
             
             Button {
-                let insertedRow = Imitation.insert(databaseNumber: DATABASE_NUMBER)
+                let insertedRow = Imitation.insert(databaseNumber: DATABASE_NUMBER, deviceRow: DeviceRow(id: "", title: "Безымянный девайс", developer: "Безымянная компания", type: "Неизвестный тип"))
                 tableChangeLog.insert(row: insertedRow!, databaseNumber: DATABASE_NUMBER, operation: "Строка была вставлена")
             } label: {
                 Label("Insert", systemImage: "text.insert")
@@ -36,6 +36,14 @@ struct ContentView: View {
                 tableChangeLog.insert(row: deletedRow!, databaseNumber: DATABASE_NUMBER, operation: "Строка была удалена")
             } label: {
                 Label("Delete", systemImage: "trash.fill")
+            }
+            
+            Button {
+                let replicator = Replicator(updatePeriodSeconds: 5)
+                
+                replicator.start()
+            } label: {
+                Label("Start replicator", systemImage: "play.fill")
             }
             .padding(.bottom)
         }
