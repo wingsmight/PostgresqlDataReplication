@@ -7,63 +7,79 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2C2302DB-9BAA-48FD-9CF5-E8143B9208A6"
+            uuid = "E2523F7E-5C85-4B26-9B26-0428010EC775"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PostgresqlDataReplication/Services/Replicator.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "updateDatabases()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CBD3A744-CB5E-4669-906D-171307E95673"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PostgresqlDataReplication/Services/Database.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "50"
             endingLineNumber = "50"
-            landmarkName = "updateDatabases()"
+            landmarkName = "update(databaseNumber:deviceRow:operation:operationDate:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "070C5B2E-22D5-4D16-B73F-7CBA31BDD555"
+            uuid = "93DD9F62-674D-48DC-BFCA-C7FA9E0AC1E2"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PostgresqlDataReplication/Services/Replicator.swift"
+            filePath = "PostgresqlDataReplication/Services/Database.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
-            landmarkName = "updateDatabases()"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "insert(databaseNumber:deviceRow:operation:operationDate:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "7E2C10AA-4B9A-49C8-8C12-FFC9475E84D5"
+            uuid = "CBFE2B3C-4D15-4F9A-8826-5846728BF217"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "PostgresqlDataReplication/Services/Replicator.swift"
+            filePath = "PostgresqlDataReplication/Services/Database.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
-            landmarkName = "updateDatabases()"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "delete(databaseNumber:deviceNumber:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "173B6B73-92A8-4F0E-ABBD-B0668EE63BFB"
+            uuid = "01A6A4FB-02C7-485D-B3D7-BAF6F0474483"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PostgresqlDataReplication/Services/Replicator.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
             landmarkName = "updateDatabases()"
             landmarkType = "7">
          </BreakpointContent>

@@ -13,7 +13,59 @@ class Imitation {
     typealias InsertedRow = (Row)
     typealias DeletedRow = (Row)
     
-    public static func update(databaseNumber: Int) -> UpdatedRow? {
+    
+    private var tableChangeLog = TableChangeLog()
+    private var operatePeriodSeconds: Double
+    
+    
+    public init() {
+        operatePeriodSeconds = Double.random(in: 1.0...4.0)
+    }
+    
+    
+    public func start() {
+        let connection = try! PostgresClientKit.Connection(configuration: SqlRequest.configuration)
+        defer { connection.close() }
+        for databaseIndex in 1...3 {
+            updateDeviceCount(databaseNumber: databaseIndex, connection: connection)
+        }
+                              
+        operatePeriodSeconds = Double.random(in: 1.0...4.0)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + operatePeriodSeconds, execute: operate)
+    }
+    public func stop() {
+        tableChangeLog.saveToFile(fileUrl: URL(fileURLWithPath: "/Users/user/Downloads/devices_changelog.txt"))
+    }
+    
+    private func operate() {
+        let databaseNumber = Int.random(in: 1...3)
+        let operationIndex = Int.random(in: 0...2)
+        
+        switch operationIndex {
+        case 0:
+            let updatedRow = update(databaseNumber: databaseNumber)
+            tableChangeLog.insert(row: updatedRow!.oldRow, databaseNumber: databaseNumber, operation: "Строка была изменена.До:")
+            tableChangeLog.insert(row: updatedRow!.newRow, databaseNumber: databaseNumber, operation: "Строка была изменена.После:")
+            
+            break
+        case 1:
+            let deviceRow = DeviceRow(id: "", title: "Девайс\(Int.random(in: 1...100))", developer: "Комания\(Int.random(in: 1...100))", type: "неопределенный тип")
+            let insertedRow = insert(databaseNumber: databaseNumber, deviceRow: deviceRow)
+            tableChangeLog.insert(row: insertedRow!, databaseNumber: databaseNumber, operation: "Строка была вставлена")
+            
+            break
+        case 2:
+            let deletedRow = delete(databaseNumber: databaseNumber)
+            tableChangeLog.insert(row: deletedRow!, databaseNumber: databaseNumber, operation: "Строка была удалена")
+            
+            break
+        default:
+            fatalError("operation index is out of range")
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + operatePeriodSeconds, execute: operate)
+    }
+    private func update(databaseNumber: Int) -> UpdatedRow? {
         let connection = try! PostgresClientKit.Connection(configuration: SqlRequest.configuration)
         defer { connection.close() }
 
@@ -36,7 +88,7 @@ class Imitation {
         
         return UpdatedRow(oldRow: oldRow!, newRow: newRow!)
     }
-    public static func insert(databaseNumber: Int, deviceRow: DeviceRow) -> Row? {
+    private func insert(databaseNumber: Int, deviceRow: DeviceRow) -> Row? {
         let connection = try! PostgresClientKit.Connection(configuration: SqlRequest.configuration)
         defer { connection.close() }
 
@@ -49,7 +101,7 @@ class Imitation {
         let insertedRow = getOidRow(databaseNumber: databaseNumber, connection: connection, oidModifier: "max")
         return insertedRow
     }
-    public static func delete(databaseNumber: Int) -> Row? {
+    private func delete(databaseNumber: Int) -> Row? {
         let connection = try! PostgresClientKit.Connection(configuration: SqlRequest.configuration)
         defer { connection.close() }
 
@@ -64,12 +116,12 @@ class Imitation {
         defer { deleteRowStatement.close() }
         try! deleteRowStatement.execute()
         
-        updateDeviceCount(databaseNumber: databaseNumber, connection: connection)
+        //updateDeviceCount(databaseNumber: databaseNumber, connection: connection)
         
         return oldRow
     }
     
-    private static func getOidRow(databaseNumber: Int, connection: Connection, oidModifier: String) -> Row? {
+    private func getOidRow(databaseNumber: Int, connection: Connection, oidModifier: String) -> Row? {
         let text = "SELECT * FROM pmib8502.devices_in_db\(databaseNumber) WHERE oid=(SELECT \(oidModifier)(oid) FROM pmib8502.devices_in_db\(databaseNumber))"
         let oldRowStatement = try! connection.prepareStatement(text: text)
         defer { oldRowStatement.close() }
@@ -85,7 +137,7 @@ class Imitation {
         
         return nil
     }
-    private static func updateDeviceCount(databaseNumber: Int, connection: Connection) {
+    private func updateDeviceCount(databaseNumber: Int, connection: Connection) {
         let text = "SELECT setval('device_count', count(*)) FROM pmib8502.devices_in_db\(databaseNumber)"
         let statement = try! connection.prepareStatement(text: text)
         defer { statement.close() }

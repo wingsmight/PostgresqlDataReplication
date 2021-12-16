@@ -10,49 +10,65 @@ import SwiftUI
 struct ContentView: View {
     private let DATABASE_NUMBER = 1
     
-    private var tableChangeLog = TableChangeLog()
+    private let imitation = Imitation()
+    
+    
+    @State private var replicator = Replicator(updatePeriodSeconds: 10.0)
+    @State private var replicatorUpdatePeriodSeconds = ""
+    @State private var replicatorUpdatePeriodTextField = false
+    @State private var isImitationButtonDisabled = false
+    @State private var isReplicatorButtonDisabled = false
     
     
     var body: some View {
         VStack {
-            Button {
-                let updatedRow = Imitation.update(databaseNumber: DATABASE_NUMBER)
-                tableChangeLog.insert(row: updatedRow!.oldRow, databaseNumber: DATABASE_NUMBER, operation: "Строка была изменена.До:")
-                tableChangeLog.insert(row: updatedRow!.newRow, databaseNumber: DATABASE_NUMBER, operation: "Строка была изменена.После:")
-            } label: {
-                Label("Update", systemImage: "arrow.clockwise")
-            }
-            .padding(.top)
+            TextField("Интервал запуска РД", text: $replicatorUpdatePeriodSeconds)
+                .frame(width: 200)
+                .padding(.top)
+                .disabled(replicatorUpdatePeriodTextField)
             
             Button {
-                let insertedRow = Imitation.insert(databaseNumber: DATABASE_NUMBER, deviceRow: DeviceRow(id: "", title: "Безымянный девайс", developer: "Безымянная компания", type: "Неизвестный тип"))
-                tableChangeLog.insert(row: insertedRow!, databaseNumber: DATABASE_NUMBER, operation: "Строка была вставлена")
-            } label: {
-                Label("Insert", systemImage: "text.insert")
-            }
-            
-            Button {
-                let deletedRow = Imitation.delete(databaseNumber: DATABASE_NUMBER)
-                tableChangeLog.insert(row: deletedRow!, databaseNumber: DATABASE_NUMBER, operation: "Строка была удалена")
-            } label: {
-                Label("Delete", systemImage: "trash.fill")
-            }
-            
-            Button {
-                let replicator = Replicator(updatePeriodSeconds: 5)
+                imitation.start()
                 
-                replicator.start()
+                isImitationButtonDisabled = true
             } label: {
-                Label("Start replicator", systemImage: "play.fill")
+                Label("Запустить ИРС", systemImage: "play.fill")
             }
+            .disabled(isImitationButtonDisabled)
+            
+            Button {
+                replicator = Replicator(updatePeriodSeconds: Double(replicatorUpdatePeriodSeconds)!)
+                replicator.start()
+                
+                isReplicatorButtonDisabled = true
+                replicatorUpdatePeriodTextField = true
+            } label: {
+                Label("Запустить РД", systemImage: "play.fill")
+            }
+            .disabled(isReplicatorButtonDisabled || replicatorUpdatePeriodSeconds.isEmpty)
             .padding(.bottom)
+            
+            Button {
+                isImitationButtonDisabled = false
+                isReplicatorButtonDisabled = false
+            } label: {
+                Label("Остановить ИРС и РД", systemImage: "stop.fill")
+            }
+            .disabled(!isImitationButtonDisabled && !isReplicatorButtonDisabled)
+            .padding()
         }
+        .frame(width: 350)
         .padding()
         .onAppear() {
+            for databaseNumber in 1...3 {
+                Database.create(databaseNumber: databaseNumber)
+            }
+            
             SqlRequest.createSequence()
         }
         .onDisappear {
-            tableChangeLog.saveToFile(fileUrl: URL(fileURLWithPath: "/Users/user/Downloads/devices_changelog.txt"))
+            imitation.stop()
+            replicator.stop()
         }
     }
 }

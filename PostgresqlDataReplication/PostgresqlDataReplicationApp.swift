@@ -12,6 +12,7 @@ struct PostgresqlDataReplicationApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .navigationTitle("PostgreSQL Data Replication")
         }
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 import PostgresClientKit
 
 class Replicator {
-    private let updatePeriodSeconds: Double
+    private var updatePeriodSeconds: Double
     
     private var lastUpdateDate = Date(timeIntervalSince1970: 0)
     
@@ -22,15 +22,22 @@ class Replicator {
     public func start() {
         DispatchQueue.main.asyncAfter(deadline: .now() + updatePeriodSeconds, execute: updateDatabases)
     }
+    public func stop() {
+        updatePeriodSeconds = Double.greatestFiniteMagnitude
+    }
     
     private func updateDatabases() {
         let connection = try! PostgresClientKit.Connection(configuration: SqlRequest.configuration)
         defer { connection.close() }
         
-//        let text = "lock table pmib8502.devices_in_db1, pmib8502.devices_in_db2, pmib8502.devices_in_db3 in exclusive mode"
-//        let lockTableStatement = try! connection.prepareStatement(text: text)
-//        defer { lockTableStatement.close() }
-//        try! lockTableStatement.execute()
+        try! connection.beginTransaction()
+        
+        let text = "lock table pmib8502.devices_in_db1, pmib8502.devices_in_db2, pmib8502.devices_in_db3 in exclusive mode"
+        let lockTableStatement = try! connection.prepareStatement(text: text)
+        defer { lockTableStatement.close() }
+        try! lockTableStatement.execute()
+        
+        try! connection.commitTransaction()
         
         var rows = getChangelogRows();
         
@@ -44,28 +51,27 @@ class Replicator {
             let operationDate = try! row.columns[9].string()
             
             for databaseNumber in 1...3 {
-                if databaseNumber != sourceDatabaseNumber {
-                    switch operation {
-                    case "изменена":
-                        Database.update(databaseNumber: databaseNumber, deviceRow: deviceRow, operation: fullOperationDescription, operationDate: operationDate)
-                        
-                        break
-                    case "вставлена":
-                        Database.insert(databaseNumber: databaseNumber, deviceRow: deviceRow, operation: fullOperationDescription, operationDate: operationDate)
-                        
-                        break
-                    case "удалена":
-                        Database.delete(databaseNumber: databaseNumber, deviceNumber: deviceRow.id)
-                        
-                        break
-                    default:
-                        fatalError("operation doesn't exist")
-                    }
+                switch operation {
+                case "изменена":
+                    Database.update(databaseNumber: databaseNumber, deviceRow: deviceRow, operation: fullOperationDescription, operationDate: operationDate)
+                    
+                    break
+                case "вставлена":
+                    Database.insert(databaseNumber: databaseNumber, deviceRow: deviceRow, operation: fullOperationDescription, operationDate: operationDate)
+                    
+                    break
+                case "удалена":
+                    Database.delete(databaseNumber: databaseNumber, deviceNumber: deviceRow.id)
+                    
+                    break
+                default:
+                    fatalError("operation doesn't exist")
                 }
             }
         }
         
         lastUpdateDate = Date()
+        print("lastUpdateDate = \(lastUpdateDate)")
         DispatchQueue.main.asyncAfter(deadline: .now() + updatePeriodSeconds, execute: updateDatabases)
     }
     private func removeCollisions(rows: inout [Row]) {
