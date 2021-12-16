@@ -16,6 +16,7 @@ class Imitation {
     
     private var tableChangeLog = TableChangeLog()
     private var operatePeriodSeconds: Double
+    private var isWorking = false
     
     
     public init() {
@@ -33,8 +34,12 @@ class Imitation {
         operatePeriodSeconds = Double.random(in: 1.0...4.0)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + operatePeriodSeconds, execute: operate)
+        
+        isWorking = true
     }
     public func stop() {
+        isWorking = false
+        
         tableChangeLog.saveToFile(fileUrl: URL(fileURLWithPath: "/Users/user/Downloads/devices_changelog.txt"))
     }
     
@@ -63,7 +68,10 @@ class Imitation {
         default:
             fatalError("operation index is out of range")
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + operatePeriodSeconds, execute: operate)
+        
+        if isWorking {
+            DispatchQueue.main.asyncAfter(deadline: .now() + operatePeriodSeconds, execute: operate)
+        }
     }
     private func update(databaseNumber: Int) -> UpdatedRow? {
         let connection = try! PostgresClientKit.Connection(configuration: SqlRequest.configuration)
