@@ -10,8 +10,8 @@ import PostgresClientKit
 
 class Replicator {
     private var updatePeriodSeconds: Double
-    
     private var lastUpdateDate = Date(timeIntervalSince1970: 0)
+    private var isWorking = false
     
     
     public init(updatePeriodSeconds: Double) {
@@ -20,10 +20,12 @@ class Replicator {
     
     
     public func start() {
+        isWorking = true
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + updatePeriodSeconds, execute: updateDatabases)
     }
     public func stop() {
-        updatePeriodSeconds = Double.greatestFiniteMagnitude
+        isWorking = false
     }
     
     private func updateDatabases() {
@@ -72,7 +74,9 @@ class Replicator {
         
         lastUpdateDate = Date()
         print("lastUpdateDate = \(lastUpdateDate)")
-        DispatchQueue.main.asyncAfter(deadline: .now() + updatePeriodSeconds, execute: updateDatabases)
+        if isWorking {
+            DispatchQueue.main.asyncAfter(deadline: .now() + updatePeriodSeconds, execute: updateDatabases)
+        }
     }
     private func removeCollisions(rows: inout [Row]) {
         rows.reverse()

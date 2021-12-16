@@ -95,11 +95,18 @@ class Imitation {
         let text = "INSERT INTO pmib8502.devices_in_db\(databaseNumber) (n_device, label, developer, type, last_operation, last_operation_date) VALUES (\(deviceRow.id.isEmpty ? "'D'||nextval('device_count')" : "'\(deviceRow.id)'"), '\(deviceRow.title)', '\(deviceRow.developer)', '\(deviceRow.type)', 'вставка в БД\(databaseNumber)', date_trunc('second', current_timestamp) AT TIME ZONE '-7 UTC')"
         let insertedRowStatement = try! connection.prepareStatement(text: text)
         defer { insertedRowStatement.close() }
-        let cursor = try! insertedRowStatement.execute()
-        defer { cursor.close() }
         
-        let insertedRow = getOidRow(databaseNumber: databaseNumber, connection: connection, oidModifier: "max")
-        return insertedRow
+        do {
+            let cursor = try insertedRowStatement.execute()
+            defer { cursor.close() }
+            
+            let insertedRow = getOidRow(databaseNumber: databaseNumber, connection: connection, oidModifier: "max")
+            return insertedRow
+        } catch {
+            print(error)
+        }
+
+        return nil
     }
     private func delete(databaseNumber: Int) -> Row? {
         let connection = try! PostgresClientKit.Connection(configuration: SqlRequest.configuration)

@@ -51,6 +51,9 @@ struct ContentView: View {
             Button {
                 isImitationButtonDisabled = false
                 isReplicatorButtonDisabled = false
+                
+                imitation.stop()
+                replicator.stop()
             } label: {
                 Label("Остановить ИРС и РД", systemImage: "stop.fill")
             }
