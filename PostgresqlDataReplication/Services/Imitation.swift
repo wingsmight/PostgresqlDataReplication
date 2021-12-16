@@ -9,9 +9,9 @@ import Foundation
 import PostgresClientKit
 
 class Imitation {
-    typealias UpdatedRow = (oldRow: String, newRow: String)
-    typealias InsertedRow = (String)
-    typealias DeletedRow = (String)
+    typealias UpdatedRow = (oldRow: Row, newRow: Row)
+    typealias InsertedRow = (Row)
+    typealias DeletedRow = (Row)
     
     public static func update(databaseNumber: Int) -> UpdatedRow? {
         let connection = try! PostgresClientKit.Connection(configuration: SqlRequest.configuration)
@@ -34,9 +34,9 @@ class Imitation {
         }
         print("new row = \(newRow)")
         
-        return UpdatedRow(oldRow: oldRow!.description, newRow: newRow!.description)
+        return UpdatedRow(oldRow: oldRow!, newRow: newRow!)
     }
-    public static func insert(databaseNumber: Int) -> InsertedRow? {
+    public static func insert(databaseNumber: Int) -> Row? {
         let connection = try! PostgresClientKit.Connection(configuration: SqlRequest.configuration)
         defer { connection.close() }
 
@@ -46,12 +46,10 @@ class Imitation {
         let cursor = try! insertedRowStatement.execute()
         defer { cursor.close() }
         
-        if let insertedRow = getOidRow(databaseNumber: databaseNumber, connection: connection, oidModifier: "max") {
-            return InsertedRow(insertedRow)
-        }
-        return nil
+        let insertedRow = getOidRow(databaseNumber: databaseNumber, connection: connection, oidModifier: "max")
+        return insertedRow
     }
-    public static func delete(databaseNumber: Int) -> DeletedRow? {
+    public static func delete(databaseNumber: Int) -> Row? {
         let connection = try! PostgresClientKit.Connection(configuration: SqlRequest.configuration)
         defer { connection.close() }
 
@@ -59,7 +57,7 @@ class Imitation {
         if oldRow == nil {
             return nil
         }
-        print("old row = \(oldRow)")
+        print("old row = \(oldRow?.columns)")
         
         let text = "DELETE FROM pmib8502.devices_in_db\(databaseNumber) WHERE oid=(SELECT max(oid) FROM pmib8502.devices_in_db\(databaseNumber)); "
         let deleteRowStatement = try! connection.prepareStatement(text: text)
@@ -68,10 +66,10 @@ class Imitation {
         
         updateDeviceCount(databaseNumber: databaseNumber, connection: connection)
         
-        return DeletedRow(oldRow!.description)
+        return oldRow
     }
     
-    private static func getOidRow(databaseNumber: Int, connection: Connection, oidModifier: String) -> String? {
+    private static func getOidRow(databaseNumber: Int, connection: Connection, oidModifier: String) -> Row? {
         let text = "SELECT * FROM pmib8502.devices_in_db\(databaseNumber) WHERE oid=(SELECT \(oidModifier)(oid) FROM pmib8502.devices_in_db\(databaseNumber))"
         let oldRowStatement = try! connection.prepareStatement(text: text)
         defer { oldRowStatement.close() }
@@ -80,9 +78,9 @@ class Imitation {
         defer { cursor.close() }
         
         if let firstRow = cursor.next() {
-            let insertedRow = try! firstRow.get().columns
+            let insertedRow = try! firstRow.get()
             
-            return insertedRow.description
+            return insertedRow
         }
         
         return nil

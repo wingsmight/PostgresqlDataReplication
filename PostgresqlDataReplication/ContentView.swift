@@ -8,23 +8,32 @@
 import SwiftUI
 
 struct ContentView: View {
+    private let DATABASE_NUMBER = 1
+    
+    private var tableChangeLog = TableChangeLog()
+    
+    
     var body: some View {
         VStack {
             Button {
-                Imitation.update(databaseNumber: 1)
+                let updatedRow = Imitation.update(databaseNumber: DATABASE_NUMBER)
+                tableChangeLog.insert(row: updatedRow!.oldRow, databaseNumber: DATABASE_NUMBER, operation: "Строка была изменена.До:")
+                tableChangeLog.insert(row: updatedRow!.newRow, databaseNumber: DATABASE_NUMBER, operation: "Строка была изменена.После:")
             } label: {
                 Label("Update", systemImage: "arrow.clockwise")
             }
             .padding(.top)
             
             Button {
-                Imitation.insert(databaseNumber: 1)
+                let insertedRow = Imitation.insert(databaseNumber: DATABASE_NUMBER)
+                tableChangeLog.insert(row: insertedRow!, databaseNumber: DATABASE_NUMBER, operation: "Строка была вставлена")
             } label: {
                 Label("Insert", systemImage: "text.insert")
             }
             
             Button {
-                Imitation.delete(databaseNumber: 1)
+                let deletedRow = Imitation.delete(databaseNumber: DATABASE_NUMBER)
+                tableChangeLog.insert(row: deletedRow!, databaseNumber: DATABASE_NUMBER, operation: "Строка была удалена")
             } label: {
                 Label("Delete", systemImage: "trash.fill")
             }
@@ -33,6 +42,9 @@ struct ContentView: View {
         .padding()
         .onAppear() {
             SqlRequest.createSequence()
+        }
+        .onDisappear {
+            tableChangeLog.saveToFile(fileUrl: URL(fileURLWithPath: "/Users/user/Downloads/devices_changelog.txt"))
         }
     }
 }

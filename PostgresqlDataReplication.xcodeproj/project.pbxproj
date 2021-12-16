@@ -15,6 +15,7 @@
 		CE5363AC276A5B1D00C52286 /* PostgresClientKit in Frameworks */ = {isa = PBXBuildFile; productRef = CE5363AB276A5B1D00C52286 /* PostgresClientKit */; };
 		CE5363AE276A74EA00C52286 /* Replicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5363AD276A74EA00C52286 /* Replicator.swift */; };
 		CE5363B0276A752800C52286 /* Imitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5363AF276A752800C52286 /* Imitation.swift */; };
+		CE6CD637276AB2A500A2E536 /* TableChangeLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6CD636276AB2A500A2E536 /* TableChangeLog.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		CE5363A8276A5A2200C52286 /* SqlRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqlRequest.swift; sourceTree = "<group>"; };
 		CE5363AD276A74EA00C52286 /* Replicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Replicator.swift; sourceTree = "<group>"; };
 		CE5363AF276A752800C52286 /* Imitation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Imitation.swift; sourceTree = "<group>"; };
+		CE6CD636276AB2A500A2E536 /* TableChangeLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableChangeLog.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 				CE5363A8276A5A2200C52286 /* SqlRequest.swift */,
 				CE5363AD276A74EA00C52286 /* Replicator.swift */,
 				CE5363AF276A752800C52286 /* Imitation.swift */,
+				CE6CD636276AB2A500A2E536 /* TableChangeLog.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -166,6 +169,7 @@
 			files = (
 				CE5363AE276A74EA00C52286 /* Replicator.swift in Sources */,
 				CE5363B0276A752800C52286 /* Imitation.swift in Sources */,
+				CE6CD637276AB2A500A2E536 /* TableChangeLog.swift in Sources */,
 				CE53639B276A59BB00C52286 /* ContentView.swift in Sources */,
 				CE5363A9276A5A2200C52286 /* SqlRequest.swift in Sources */,
 				CE536399276A59BB00C52286 /* PostgresqlDataReplicationApp.swift in Sources */,
